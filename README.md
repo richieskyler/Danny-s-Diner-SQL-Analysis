@@ -1,5 +1,7 @@
 # Danny's Diner SQL Project Documentation
 
+![DannysDiner](screenshots/danny.png)
+
 ## Introduction
 
 Danny seriously loves Japanese food, so at the beginning of 2021, he decided to embark upon a risky venture and opened up a cute little restaurant that sells his three favorite foods: sushi, curry, and ramen. Danny’s Diner is in need of your assistance to help the restaurant stay afloat. The restaurant has captured some very basic data from their few months of operation but has no idea how to use their data to help them run the business.
@@ -21,7 +23,7 @@ Each of the following case study questions can be answered using a single SQL st
 	join menu m on m.product_id = s.product_id
     group by s.customer_id;
     ```
-    ![Total Amount Spent](screenshots/total_amount_spent.png)
+    ![Total Amount Spent](screenshots/1.png)
 
 2. **Number of Days Each Customer Visited the Restaurant**
     ```sql
@@ -30,7 +32,7 @@ Each of the following case study questions can be answered using a single SQL st
     group by customer_id
     order by no_of_days_vistited desc;
     ```
-    ![Visit Days](screenshots/visit_days.png)
+    ![Visit Days](screenshots/2.png)
 
 3. **First Item Purchased by Each Customer**
     ```sql
@@ -44,7 +46,7 @@ Each of the following case study questions can be answered using a single SQL st
 		join sales s on s.customer_id= first_purchase.customer_id AND s.order_date = first_purchase.first_purchase_date
 		join menu m on m.product_id = s.product_id;
     ```
-    ![First Purchased Item](screenshots/first_purchased_item.png)
+    ![First Purchased Item](screenshots/3.png)
 
 4. **Most Purchased Item and Its Frequency**
     ```sql
@@ -56,7 +58,7 @@ Each of the following case study questions can be answered using a single SQL st
     limit 1;
 
     ```
-    ![Most Purchased Item](screenshots/most_purchased_item.png)
+    ![Most Purchased Item](screenshots/4.png)
 
 5. **Most Popular Item for Each Customer**
     ```sql
@@ -74,7 +76,7 @@ join
 		group by customer_id) max_freq on pf.customer_id = max_freq.customer_id AND pf.freq = max_freq.sales_no
         group by pf.customer_id, pf.product_name;
     ```
-    ![Most Popular Item](screenshots/most_popular_item.png)
+    ![Most Popular Item](screenshots/5.png)
 
 6. **First Item Purchased After Joining by Each Member**
     ```sql
@@ -95,7 +97,7 @@ join
         group by cte.customer_id, cte.product_name
         order by customer_id;s.purchase_date LIMIT 1;
     ```
-    ![First Item After Joining](screenshots/first_item_after_joining.png)
+    ![First Item After Joining](screenshots/6.png)
 
 7. **Item Purchased Just Before Joining for Each Member**
     ```sql
@@ -111,7 +113,7 @@ select customer_id, product_name, order_date, join_date
 	from cte
     where cust_rank = 1;
     ```
-    ![Item Before Joining](screenshots/item_before_joining.png)
+    ![Item Before Joining](screenshots/7.png)
 
 8. **Total Items and Amount Spent Before Joining for Each Member**
     ```sql
@@ -123,7 +125,7 @@ select customer_id, product_name, order_date, join_date
 		group by s.customer_id
         order by customer_id;
     ```
-    ![Total Items Before Joining](screenshots/total_items_before_joining.png)
+    ![Total Items Before Joining](screenshots/8.png)
 
 9. **Points Calculation Based on Spending**
     ```sql
@@ -137,7 +139,7 @@ select customer_id, product_name, order_date, join_date
 		using (product_id)
         group by customer_id;
     ```
-    ![Points Calculation](screenshots/points_calculation.png)
+    ![Points Calculation](screenshots/9.png)
 
 10. **Points Earned by Customers A and B in January**
     ```sql
@@ -172,7 +174,7 @@ select customer_id, product_name, order_date, join_date
     	s.customer_id;
     ```
 
-    ![Points in January](screenshots/points_in_january.png)
+    ![Points in January](screenshots/10.png)
 
 ## Conclusion
 

@@ -72,9 +72,9 @@ Each of the following case study questions can be answered using a single SQL st
 		from sales s
 		join menu m on m.product_id = s.product_id
 		group by customer_id, product_name)
-select pf.customer_id, pf.product_name, max(pf.freq)
+    select pf.customer_id, pf.product_name, max(pf.freq)
 	from product_freq pf
-join
+    join
 	(select customer_id, max(freq) as sales_no
 		from product_freq
 		group by customer_id) max_freq on pf.customer_id = max_freq.customer_id AND pf.freq = max_freq.sales_no
@@ -92,9 +92,9 @@ join
 		join menu 	 m  on m.product_id   = s.product_id
 		where s.order_date >= mb.join_date
 		group by s.customer_id, m.product_name)
-select cte.customer_id, cte.product_name, cte.member_date
-	from cte
-join
+    select cte.customer_id, cte.product_name, cte.member_date
+		from cte
+    join
 	(select customer_id, min(member_date) as min_join_date
 		from cte
 		group by customer_id) members on cte.customer_id = members.customer_id and cte.member_date = members.min_join_date
@@ -107,24 +107,25 @@ join
     ```sql
     with cte
 	as
-	(select s.customer_id,m.product_name,mb.join_date, s.order_date, rank() over(partition by s.customer_id order by s.order_date DESC) as cust_rank
+	(select s.customer_id,m.product_name,mb.join_date, s.order_date, rank() over(partition by s.customer_id order by s.order_date 
+    DESC) as cust_rank
 		from sales s
 		join members mb on mb.customer_id = s.customer_id
 		join menu 	 m  on m.product_id   = s.product_id
 		where s.order_date < mb.join_date
 		)
-select customer_id, product_name, order_date, join_date
-	from cte
-    where cust_rank = 1;
+    select customer_id, product_name, order_date, join_date
+		from cte
+    	where cust_rank = 1;
     ```
     ![Item Before Joining](screenshots/7.png)
 
 8. **Total Items and Amount Spent Before Joining for Each Member**
     ```sql
-    SELECT m.customer_id, COUNT(s.menu_item) AS total_items, SUM(s.amount) AS total_amount FROM members m LEFT JOIN sales s ON m.customer_id = s.customer_id AND s.purchase_date < m.join_date GROUP BY m.customer_id;select s.customer_id, count(s.product_id) as total_item, sum(m.price) as total_amount
+    select s.customer_id, count(s.product_id) as total_item, sum(m.price) as total_amount
 		from sales s
 		join members mb on mb.customer_id = s.customer_id
-		join menu 	 m  on m.product_id   = s.product_id
+		join menu m  on m.product_id   = s.product_id
 		where s.order_date < mb.join_date
 		group by s.customer_id
         order by customer_id;

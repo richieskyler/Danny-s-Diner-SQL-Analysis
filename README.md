@@ -152,7 +152,6 @@ from sales s
         left join members mb using (customer_id)
         where s.order_date between '2021-01-01' and '2021-01-31' and s.customer_id in ('A' , 'B')
         group by s.customer_id;
-
 SELECT
     s.customer_id,
     SUM(

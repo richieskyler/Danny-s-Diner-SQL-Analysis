@@ -12,6 +12,10 @@ Danny wants to use the data to answer a few simple questions about his customers
 
 Danny has provided you with a sample of his overall customer data due to privacy issues. Still, he hopes that these examples are enough for you to write fully functioning SQL queries to help him answer his questions! Danny has shared with you three key datasets for this case study: sales, menu, and members.
 
+## Data Model
+
+![DataModel](screenshots/data_model.png)
+
 ## Case Study Questions
 
 Each of the following case study questions can be answered using a single SQL statement:

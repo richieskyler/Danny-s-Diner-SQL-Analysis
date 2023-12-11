@@ -141,7 +141,7 @@ from sales
 
 10. **Points Earned by Customers A and B in January**
     ```sql
-   select s.customer_id, 
+select s.customer_id, 
 		sum(
 			case 
 				 when s.order_date between mb.join_date and date_add(mb.join_date, interval 7 day) then price*20

@@ -141,35 +141,35 @@ select customer_id, product_name, order_date, join_date
 
 10. **Points Earned by Customers A and B in January**
     ```sql
-   select s.customer_id, 
+    select s.customer_id, 
 		sum(
 			case 
 				 when s.order_date between mb.join_date and date_add(mb.join_date, interval 7 day) then price*20
 				 else price*10
 		    end)  as points
-   from sales s
+    from sales s
 		left join menu m using (product_id)
         left join members mb using (customer_id)
         where s.order_date between '2021-01-01' and '2021-01-31' and s.customer_id in ('A' , 'B')
         group by s.customer_id;
-   SELECT
-    s.customer_id,
-    SUM(
-        CASE
-            WHEN s.order_date BETWEEN mem.join_date AND DATE_ADD(mem.join_date, INTERVAL 7 DAY) THEN price * 20
-            WHEN MONTH(s.order_date) = 1 AND YEAR(s.order_date) = 2021 THEN price * 10
-            ELSE 0
+    SELECT
+    	s.customer_id,
+    	SUM(
+        	CASE
+            	WHEN s.order_date BETWEEN mem.join_date AND DATE_ADD(mem.join_date, INTERVAL 7 DAY) THEN price * 20
+            	WHEN MONTH(s.order_date) = 1 AND YEAR(s.order_date) = 2021 THEN price * 10
+            	ELSE 0
         END
-    ) AS points
-   FROM
-    sales s
-    LEFT JOIN menu m ON s.product_id = m.product_id
-    LEFT JOIN members mem ON s.customer_id = mem.customer_id
-   WHERE
-    s.customer_id IN ('A', 'B') AND
-    (s.order_date BETWEEN '2021-01-01' AND '2021-01-31') -- Filter for January 2021
-   GROUP BY
-    s.customer_id;
+     ) AS points
+    FROM
+    	sales s
+    	LEFT JOIN menu m ON s.product_id = m.product_id
+    	LEFT JOIN members mem ON s.customer_id = mem.customer_id
+    WHERE
+    	s.customer_id IN ('A', 'B') AND
+    	(s.order_date BETWEEN '2021-01-01' AND '2021-01-31') -- Filter for January 2021
+    GROUP BY
+    	s.customer_id;
     ```
     ![Points in January](screenshots/points_in_january.png)
 

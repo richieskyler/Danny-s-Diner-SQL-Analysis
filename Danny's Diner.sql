@@ -1,14 +1,3 @@
--- 											DANNY'S DINER
-
--- 											INTRODUCTION
--- Danny's diner is a little resturant that sells 3 of his favorite japanese food Sushi, Curry and Ramen.
-
--- 										  PROBLEM STATEMENT
--- Danny wants to answers some questions about his customers, visting patterns, how much they have spent so far, and which items are their favorite.
--- This insights will help him decide whether he should expand the exixting loyaty program.
-
--- 											NOTE
--- Danny has provided you with a sample of his overall customer data due to privacy issues, but he hopes that these examples are enough for you to write fully functioning SQL queries to help him answer his questions!
 /*
 -- Inserting the sample data into the required table
 

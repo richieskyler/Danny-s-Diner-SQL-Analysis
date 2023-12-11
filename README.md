@@ -1,71 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
+# Danny's Diner SQL Project Documentation
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danny's Diner SQL Project Documentation</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 20px;
-        }
+## Introduction
 
-        h1, h2, h3 {
-            color: #333;
-        }
+Danny seriously loves Japanese food, so at the beginning of 2021, he decided to embark upon a risky venture and opened up a cute little restaurant that sells his three favorite foods: sushi, curry, and ramen. Danny’s Diner is in need of your assistance to help the restaurant stay afloat. The restaurant has captured some very basic data from their few months of operation but has no idea how to use their data to help them run the business.
 
-        code {
-            background-color: #f2f2f2;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }
+## Problem Statement
 
-        img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-    </style>
-</head>
+Danny wants to use the data to answer a few simple questions about his customers, especially about their visiting patterns, how much money they’ve spent, and also which menu items are their favorite. Having this deeper connection with his customers will help him deliver a better and more personalized experience for his loyal customers. He plans on using these insights to help him decide whether he should expand the existing customer loyalty program. Additionally, he needs help to generate some basic datasets so his team can easily inspect the data without needing to use SQL.
 
-<body>
+Danny has provided you with a sample of his overall customer data due to privacy issues. Still, he hopes that these examples are enough for you to write fully functioning SQL queries to help him answer his questions! Danny has shared with you three key datasets for this case study: sales, menu, and members.
 
-    <h1>Danny's Diner SQL Project Documentation</h1>
+## Case Study Questions
 
-    <h2>Introduction</h2>
+Each of the following case study questions can be answered using a single SQL statement:
 
-    <p>Danny seriously loves Japanese food so in the beginning of 2021, he decides to embark upon a risky venture and opens up a cute little restaurant that sells his 3 favourite foods: sushi, curry, and ramen. Danny’s Diner is in need of your assistance to help the restaurant stay afloat - the restaurant has captured some very basic data from their few months of operation but have no idea how to use their data to help them run the business.</p>
+1. **Total Amount Spent by Each Customer**
+    ```sql
+    SELECT customer_id, SUM(amount) AS total_spent FROM sales GROUP BY customer_id;
+    ```
+    ![Total Amount Spent](screenshots/total_amount_spent.png)
 
-    <p>Problem Statement: Danny wants to use the data to answer a few simple questions about his customers, especially about their visiting patterns, how much money they’ve spent and also which menu items are their favourite. Having this deeper connection with his customers will help him deliver a better and more personalised experience for his loyal customers. He plans on using these insights to help him decide whether he should expand the existing customer loyalty program - additionally he needs help to generate some basic datasets so his team can easily inspect the data without needing to use SQL.</p>
+2. **Number of Days Each Customer Visited the Restaurant**
+    ```sql
+    SELECT customer_id, COUNT(DISTINCT purchase_date) AS visit_days FROM sales GROUP BY customer_id;
+    ```
+    ![Visit Days](screenshots/visit_days.png)
 
-    <p>Danny has provided you with a sample of his overall customer data due to privacy issues - but he hopes that these examples are enough for you to write fully functioning SQL queries to help him answer his questions! Danny has shared with you 3 key datasets for this case study: sales, menu, and members.</p>
+3. **First Item Purchased by Each Customer**
+    ```sql
+    SELECT customer_id, MIN(purchase_date) AS first_purchase_date, FIRST_VALUE(menu_item) OVER (PARTITION BY customer_id ORDER BY purchase_date) AS first_purchased_item FROM sales GROUP BY customer_id;
+    ```
+    ![First Purchased Item](screenshots/first_purchased_item.png)
 
-    <h2>Case Study Questions</h2>
+4. **Most Purchased Item and Its Frequency**
+    ```sql
+    SELECT menu_item, COUNT(menu_item) AS purchase_count FROM sales GROUP BY menu_item ORDER BY purchase_count DESC LIMIT 1;
+    ```
+    ![Most Purchased Item](screenshots/most_purchased_item.png)
 
-    <!-- Question 1 -->
-    <h3>1. Total Amount Spent by Each Customer</h3>
-    <p>Query: <code>SELECT customer_id, SUM(amount) AS total_spent FROM sales GROUP BY customer_id;</code></p>
-    <img src="screenshots/total_amount_spent.png" alt="Total Amount Spent">
+5. **Most Popular Item for Each Customer**
+    ```sql
+    SELECT customer_id, menu_item, COUNT(menu_item) AS purchase_count FROM sales GROUP BY customer_id, menu_item ORDER BY purchase_count DESC LIMIT 1;
+    ```
+    ![Most Popular Item](screenshots/most_popular_item.png)
 
-    <!-- Question 2 -->
-    <h3>2. Number of Days Each Customer Visited the Restaurant</h3>
-    <p>Query: <code>SELECT customer_id, COUNT(DISTINCT purchase_date) AS visit_days FROM sales GROUP BY customer_id;</code></p>
-    <img src="screenshots/visit_days.png" alt="Visit Days">
+6. **First Item Purchased After Joining by Each Member**
+    ```sql
+    SELECT m.customer_id, m.join_date, s.menu_item FROM members m LEFT JOIN sales s ON m.customer_id = s.customer_id AND s.purchase_date > m.join_date ORDER BY m.customer_id, s.purchase_date LIMIT 1;
+    ```
+    ![First Item After Joining](screenshots/first_item_after_joining.png)
 
-    <!-- Repeat for each question -->
+7. **Item Purchased Just Before Joining for Each Member**
+    ```sql
+    SELECT m.customer_id, m.join_date, s.menu_item FROM members m LEFT JOIN sales s ON m.customer_id = s.customer_id AND s.purchase_date < m.join_date ORDER BY m.customer_id, s.purchase_date DESC LIMIT 1;
+    ```
+    ![Item Before Joining](screenshots/item_before_joining.png)
 
-    <h2>Screenshots</h2>
+8. **Total Items and Amount Spent Before Joining for Each Member**
+    ```sql
+    SELECT m.customer_id, COUNT(s.menu_item) AS total_items, SUM(s.amount) AS total_amount FROM members m LEFT JOIN sales s ON m.customer_id = s.customer_id AND s.purchase_date < m.join_date GROUP BY m.customer_id;
+    ```
+    ![Total Items Before Joining](screenshots/total_items_before_joining.png)
 
-    <!-- Screenshots are already included after each corresponding query -->
+9. **Points Calculation Based on Spending**
+    ```sql
+    SELECT customer_id, SUM(amount) * 10 + CASE WHEN menu_item = 'sushi' THEN SUM(amount) ELSE 0 END * 10 AS total_points FROM sales GROUP BY customer_id, menu_item;
+    ```
+    ![Points Calculation](screenshots/points_calculation.png)
 
-    <h2>Conclusion</h2>
+10. **Points Earned by Customers A and B in January**
+    ```sql
+    SELECT customer_id, SUM(CASE WHEN purchase_date >= '2023-01-01' AND purchase_date <= '2023-01-07' THEN amount * 10 * 2 ELSE amount * 10 END) AS total_points FROM sales WHERE customer_id IN ('A', 'B') GROUP BY customer_id;
+    ```
+    ![Points in January](screenshots/points_in_january.png)
 
-    <p>This documentation provides a comprehensive overview of the SQL project for Danny's Diner, including the datasets, case study questions, SQL queries, and corresponding results. The screenshots enhance the clarity of the project's execution and make it easy for the team to review and understand the findings.</p>
+## Conclusion
 
-</body>
-
-</html>
+This documentation provides a comprehensive overview of the SQL project for Danny's Diner, including the datasets, case study questions, SQL queries, and corresponding results. The screenshots enhance the clarity of the project's execution and make it easy for the team to review and understand the findings.

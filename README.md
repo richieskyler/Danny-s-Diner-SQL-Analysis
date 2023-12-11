@@ -171,6 +171,7 @@ select customer_id, product_name, order_date, join_date
     GROUP BY
     	s.customer_id;
     ```
+
     ![Points in January](screenshots/points_in_january.png)
 
 ## Conclusion

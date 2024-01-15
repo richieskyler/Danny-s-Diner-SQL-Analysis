@@ -22,10 +22,10 @@ Each of the following case study questions can be answered using a single SQL st
 
 1. **Total Amount Spent by Each Customer**
     ```sql
-    SELECT customer_id, SUM(amount) AS total_spent FROM sales GROUP BY customer_id;select s.customer_id , sum(m.price) Total_amount_spent
+    select s.customer_id , sum(m.price) Total_amount_spent
 	from sales s
 	join menu m on m.product_id = s.product_id
-    group by s.customer_id;
+    	group by s.customer_id;
     ```
     ![Total Amount Spent](screenshots/1.png)
 
@@ -33,8 +33,8 @@ Each of the following case study questions can be answered using a single SQL st
     ```sql
    select customer_id, count(distinct order_date) as no_of_days_vistited
 	from sales
-    group by customer_id
-    order by no_of_days_vistited desc;
+    	group by customer_id
+    	order by no_of_days_vistited desc;
     ```
     ![Visit Days](screenshots/2.png)
 
@@ -42,9 +42,9 @@ Each of the following case study questions can be answered using a single SQL st
     ```sql
    with first_purchase (customer_id, first_purchase_date)
 		as
-			(select customer_id, min(order_date) as first_purchase_date 
-				from sales 
-				group by customer_id)
+    		(select customer_id, min(order_date) as first_purchase_date 
+			from sales 
+			group by customer_id)
 	select first_purchase.customer_id, first_purchase.first_purchase_date, m.product_name 
 		from first_purchase
 		join sales s on s.customer_id= first_purchase.customer_id AND s.order_date = first_purchase.first_purchase_date
@@ -56,10 +56,10 @@ Each of the following case study questions can be answered using a single SQL st
     ```sql
    select product_name, count(m.product_name) as purchased_freq
 	from sales s
-    join menu m on m.product_id = s.product_id
-    group by product_name
-    order by purchased_freq desc
-    limit 1;
+    	join menu m on m.product_id = s.product_id
+    	group by product_name
+    	order by purchased_freq desc
+    	limit 1;
 
     ```
     ![Most Purchased Item](screenshots/4.png)
@@ -72,13 +72,13 @@ Each of the following case study questions can be answered using a single SQL st
 		from sales s
 		join menu m on m.product_id = s.product_id
 		group by customer_id, product_name)
-    select pf.customer_id, pf.product_name, max(pf.freq)
-	from product_freq pf
-    join
-	(select customer_id, max(freq) as sales_no
-		from product_freq
-		group by customer_id) max_freq on pf.customer_id = max_freq.customer_id AND pf.freq = max_freq.sales_no
-        group by pf.customer_id, pf.product_name;
+    	select pf.customer_id, pf.product_name, max(pf.freq)
+		from product_freq pf
+    		join
+		(select customer_id, max(freq) as sales_no
+			from product_freq
+			group by customer_id) max_freq on pf.customer_id = max_freq.customer_id AND pf.freq = max_freq.sales_no
+    			group by pf.customer_id, pf.product_name;
     ```
     ![Most Popular Item](screenshots/5.png)
 
@@ -89,17 +89,17 @@ Each of the following case study questions can be answered using a single SQL st
 	(select s.customer_id,m.product_name, min(s.order_date) as member_date
 		from sales s
 		join members mb on mb.customer_id = s.customer_id
-		join menu 	 m  on m.product_id   = s.product_id
+		join menu m  on m.product_id = s.product_id
 		where s.order_date >= mb.join_date
 		group by s.customer_id, m.product_name)
-    select cte.customer_id, cte.product_name, cte.member_date
+    	select cte.customer_id, cte.product_name, cte.member_date
 		from cte
-    join
-	(select customer_id, min(member_date) as min_join_date
+    		join
+		(select customer_id, min(member_date) as min_join_date
 		from cte
 		group by customer_id) members on cte.customer_id = members.customer_id and cte.member_date = members.min_join_date
-        group by cte.customer_id, cte.product_name
-        order by customer_id;s.purchase_date LIMIT 1;
+        	group by cte.customer_id, cte.product_name
+        	order by customer_id;s.purchase_date LIMIT 1;
     ```
     ![First Item After Joining](screenshots/6.png)
 
@@ -108,14 +108,14 @@ Each of the following case study questions can be answered using a single SQL st
     with cte
 	as
 	(select s.customer_id,m.product_name,mb.join_date, s.order_date, rank() over(partition by s.customer_id order by s.order_date 
-    DESC) as cust_rank
+    		DESC) as cust_rank
 		from sales s
 		join members mb on mb.customer_id = s.customer_id
 		join menu 	 m  on m.product_id   = s.product_id
 		where s.order_date < mb.join_date
 		)
     select customer_id, product_name, order_date, join_date
-		from cte
+	from cte
     	where cust_rank = 1;
     ```
     ![Item Before Joining](screenshots/7.png)
@@ -128,20 +128,20 @@ Each of the following case study questions can be answered using a single SQL st
 		join menu m  on m.product_id   = s.product_id
 		where s.order_date < mb.join_date
 		group by s.customer_id
-        order by customer_id;
+        	order by customer_id;
     ```
     ![Total Items Before Joining](screenshots/8.png)
 
 9. **Points Calculation Based on Spending**
     ```sql
    select customer_id, 
-		sum(
-			case when product_name = 'sushi' then price*20
-				 else price*10
-			end) as points
-   from sales
-		left join menu 
-		using (product_id)
+		sum(case
+    			when product_name = 'sushi' then price*20
+			else price*10
+		    end) as points
+   	from sales
+	left join menu 
+	using (product_id)
         group by customer_id;
     ```
     ![Points Calculation](screenshots/9.png)

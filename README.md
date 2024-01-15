@@ -23,17 +23,17 @@ Each of the following case study questions can be answered using a single SQL st
 1. **Total Amount Spent by Each Customer**
     ```sql
     select s.customer_id , sum(m.price) Total_amount_spent
-		from sales s
-		join menu m on m.product_id = s.product_id
-    group by s.customer_id;
+    	from sales s
+	join menu m on m.product_id = s.product_id
+    	group by s.customer_id;
     ```
     ![Total Amount Spent](screenshots/1.png)
 
 2. **Number of Days Each Customer Visited the Restaurant**
     ```sql
    select customer_id, count(distinct order_date) as no_of_days_vistited
-		from sales
-    group by customer_id
+    	from sales
+    	group by customer_id
 	order by no_of_days_vistited desc;
     ```
     ![Visit Days](screenshots/2.png)

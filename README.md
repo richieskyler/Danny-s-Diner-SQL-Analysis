@@ -23,7 +23,7 @@ Each of the following case study questions can be answered using a single SQL st
 1. **Total Amount Spent by Each Customer**
     ```sql
     select s.customer_id , sum(m.price) Total_amount_spent
-	from sales s
+		from sales s
 	join menu m on m.product_id = s.product_id
     	group by s.customer_id;
     ```
@@ -45,10 +45,10 @@ Each of the following case study questions can be answered using a single SQL st
     		(select customer_id, min(order_date) as first_purchase_date 
 			from sales 
 			group by customer_id)
-	select first_purchase.customer_id, first_purchase.first_purchase_date, m.product_name 
-		from first_purchase
-		join sales s on s.customer_id= first_purchase.customer_id AND s.order_date = first_purchase.first_purchase_date
-		join menu m on m.product_id = s.product_id;
+   select first_purchase.customer_id, first_purchase.first_purchase_date, m.product_name 
+	from first_purchase
+	join sales s on s.customer_id= first_purchase.customer_id AND s.order_date = first_purchase.first_purchase_date
+	join menu m on m.product_id = s.product_id;
     ```
     ![First Purchased Item](screenshots/3.png)
 
@@ -155,19 +155,17 @@ Each of the following case study questions can be answered using a single SQL st
 				 else price*10
 		    end)  as points
     from sales s
-		left join menu m using (product_id)
+	left join menu m using (product_id)
         left join members mb using (customer_id)
         where s.order_date between '2021-01-01' and '2021-01-31' and s.customer_id in ('A' , 'B')
         group by s.customer_id;
     SELECT
     	s.customer_id,
-    	SUM(
-        	CASE
+    	SUM(CASE
             	WHEN s.order_date BETWEEN mem.join_date AND DATE_ADD(mem.join_date, INTERVAL 7 DAY) THEN price * 20
             	WHEN MONTH(s.order_date) = 1 AND YEAR(s.order_date) = 2021 THEN price * 10
             	ELSE 0
-        END
-     ) AS points
+        END) AS points
     FROM
     	sales s
     	LEFT JOIN menu m ON s.product_id = m.product_id
